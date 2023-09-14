@@ -32,6 +32,9 @@ const GameBoard = (() => {
 
 const displayController = (()=>{
 
+  const renderBoard = (gameBoardArr) =>{
+    
+  }
 })();
 
 // Little global code as possible (Use factory or module)
