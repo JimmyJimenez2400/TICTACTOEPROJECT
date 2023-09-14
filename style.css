@@ -22,3 +22,10 @@ body {
   width: 100%;
   background-color: lightskyblue;
 }
+
+
+table,
+th,
+td {
+  border: 1px solid;
+}
