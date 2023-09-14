@@ -31,22 +31,27 @@ const GameBoard = (() => {
 })();
 
 const displayController = (() => {
-  const getTableContainer = () => {
+  const renderBoard = () => {
     const boardContainer = document.querySelector('.boardContainer');
+
+    boardContainer.appendChild(createBoard(GameBoard.getGameBoard()));
     return boardContainer;
   };
 
-  const renderBoard = (gameBoardArr) => {
-    const getBoardContainer = getTableContainer();
+  const createBoard = (gameBoardArr) => {
     const tableContainer = document.createElement('table');
 
-    let newRow;
-
     // We want to create a 3x3 table
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i <= gameBoardArr.length; i += 1) {
       if (i % 3 == 0 && i != 0) {
         //insert table row
-        newRow = tableContainer.insertRow(-1);
+        const newRow = tableContainer.insertRow();
+
+        for (let row = 0; row < gameBoardArr.length; row += 1) {
+          if (row % 3 == 0) {
+            newRow.insertCell();
+          }
+        }
       }
     }
 
