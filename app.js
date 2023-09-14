@@ -10,15 +10,24 @@ const Player = (playerName, marker, score) => {
 };
 
 // store gameboard inside an array inside of a Gameboard Object, Module Pattern
+
+// Purpose of Gameboard is building the thing, placing markers, and printBoard to console
 const GameBoard = (() => {
   const gameBoard = ['X', 'O', 'X', 'O', 'X', 'X', 'X', 'O', 'O'];
 
   const getGameBoard = () => gameBoard;
 
+  const printToConsole = () => {};
+
+  return { getGameBoard };
+})();
+
+// Control flow and state of the game's turn and checking if anyone won
+const GameController = (() => {
   // Players stored in objects
   const players = {
-    playerOne: null,
-    playerTwo: null,
+    playerOne: Player('John', 'X', 0),
+    playerTwo: Player('Shani', 'O', 0),
   };
 
   // Object that will control flow of the game
@@ -27,9 +36,10 @@ const GameBoard = (() => {
     playerTurn: null,
   };
 
-  return { getGameBoard };
+  return { players };
 })();
 
+// ONLY FOR DOM
 const displayController = (() => {
   const renderBoard = () => {
     const boardContainer = document.querySelector('.boardContainer');
@@ -66,6 +76,7 @@ const displayController = (() => {
   return { renderBoard };
 })();
 
+console.log(GameController.players.playerOne.getPlayerName());
 displayController.renderBoard();
 
 // Little global code as possible (Use factory or module)
