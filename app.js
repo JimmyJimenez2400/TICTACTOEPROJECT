@@ -30,6 +30,10 @@ const GameBoard = (() => {
   return { getGameBoard };
 })();
 
+const displayController = (()=>{
+
+})();
+
 // Little global code as possible (Use factory or module)
 // If you ever need one of something, use a module
 // If you need multiple of something, use factories
