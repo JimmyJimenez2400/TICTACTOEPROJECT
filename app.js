@@ -15,16 +15,20 @@ const GameBoard = (() => {
 
   const getGameBoard = () => gameBoard;
 
+  // Players stored in objects
   const players = {
     playerOne: null,
     playerTwo: null,
   };
 
+  // Object that will control flow of the game
+  const controlFlowOfGame = {
+    gameActive: true,
+    playerTurn: null,
+  };
+
   return { getGameBoard };
 })();
-
-// Players stored in objects
-// Object that will control flow of the game
 
 // Little global code as possible (Use factory or module)
 // If you ever need one of something, use a module
