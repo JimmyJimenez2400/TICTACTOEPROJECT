@@ -11,12 +11,16 @@ const Player = (playerName, marker, score) => {
 
 // store gameboard inside an array inside of a Gameboard Object, Module Pattern
 const GameBoard = (() => {
-  const gameBoard = [];
+  const gameBoard = ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X'];
+
+  const getGameBoard = () => gameBoard;
 
   const players = {
     playerOne: null,
     playerTwo: null,
   };
+
+  return { getGameBoard };
 })();
 
 // Players stored in objects
