@@ -11,7 +11,7 @@ const Player = (playerName, marker, score) => {
 
 // store gameboard inside an array inside of a Gameboard Object, Module Pattern
 const GameBoard = (() => {
-  const gameBoard = ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X'];
+  const gameBoard = ['X', 'O', 'X', 'O', 'X', 'X', 'X', 'O', 'O'];
 
   const getGameBoard = () => gameBoard;
 
@@ -42,6 +42,7 @@ const displayController = (() => {
     const tableContainer = document.createElement('table');
 
     // We want to create a 3x3 table
+    let startCount = 0;
     for (let i = 0; i <= gameBoardArr.length; i += 1) {
       if (i % 3 == 0 && i != 0) {
         //insert table row
@@ -49,7 +50,11 @@ const displayController = (() => {
 
         for (let row = 0; row < gameBoardArr.length; row += 1) {
           if (row % 3 == 0) {
-            newRow.insertCell();
+            const newCell = newRow.insertCell();
+
+            const newText = document.createTextNode(gameBoardArr[startCount++]);
+
+            newCell.appendChild(newText);
           }
         }
       }
