@@ -13,14 +13,44 @@ const Player = (playerName, marker, score) => {
 
 // Purpose of Gameboard is building the thing, placing markers, and printBoard to console
 const GameBoard = (() => {
-  const gameBoard = ['X', 'O', 'X', 'O', 'X', 'X', 'X', 'O', 'O'];
+  let gameBoard = ['X', 'O', 'X', 'O', 'O', '', '', '', 'NINE'];
 
   const getGameBoard = () => gameBoard;
 
-  const printToConsole = () => {};
+  const printToConsole = () => {
+    const boardCellValues = gameBoard.map((x) => {
+      // We need a way to update each element
+      return x;
+    });
+    console.log(boardCellValues);
+  };
 
-  return { getGameBoard };
+  const placeMarker = (player, placement) => {
+    // in here we'll get the active player marker or save it's value
+  };
+
+  const isCellAvailable = () => {
+    // We need to check if the array element value is '' (empty string), if so it's valid and we can PLACE MARKER
+    // If not, we return with an error message
+    const currentGameBoard = getGameBoard();
+
+    currentGameBoard.filter((x, index, arr) => {
+      if (x === '') {
+        console.log(`Empty at index: ${index}`);
+        // now we can allow the player who's active to place their marker
+        placeMarker();
+      } else {
+        console.log(`Not empty at index: ${index}`);
+      }
+    });
+
+    console.log(currentGameBoard);
+  };
+
+  return { getGameBoard, printToConsole, isCellAvailable };
 })();
+
+GameBoard.printToConsole();
 
 // Control flow and state of the game's turn and checking if anyone won
 const GameController = (() => {
@@ -78,6 +108,7 @@ const displayController = (() => {
 
 console.log(GameController.players.playerOne.getPlayerName());
 displayController.renderBoard();
+GameBoard.isCellAvailable();
 
 // Little global code as possible (Use factory or module)
 // If you ever need one of something, use a module
