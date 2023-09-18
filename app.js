@@ -13,20 +13,25 @@ const Player = (playerName, marker, score) => {
 
 // Purpose of Gameboard is building the thing, placing markers, and printBoard to console
 const GameBoard = (() => {
-  let gameBoard = ['X', 'O', 'X', 'O', 'O', '', '', '', 'NINE'];
+  let gameBoard = ['', '', '', '', '', '', '', '', ''];
 
   const getGameBoard = () => gameBoard;
 
   const printToConsole = () => {
-    const boardCellValues = gameBoard.map((x) => {
-      // We need a way to update each element
-      return x;
-    });
-    console.log(boardCellValues);
+    // we need a way to print the gameBoard array to console
+    console.log(getGameBoard());
   };
 
-  const placeMarker = (player, placement) => {
+  const placeMarker = (playerMarker, placement) => {
+    // const playerMarker = player.getPlayerMarker();
+    console.log(placement);
     // in here we'll get the active player marker or save it's value
+
+    let board = getGameBoard();
+
+    board[placement] = playerMarker;
+
+    printToConsole();
   };
 
   const isCellAvailable = () => {
@@ -34,11 +39,14 @@ const GameBoard = (() => {
     // If not, we return with an error message
     const currentGameBoard = getGameBoard();
 
-    currentGameBoard.filter((x, index, arr) => {
-      if (x === '') {
+    currentGameBoard.filter((element, index, arr) => {
+      if (element === '') {
         console.log(`Empty at index: ${index}`);
         // now we can allow the player who's active to place their marker
-        placeMarker();
+        placeMarker(
+          GameController.controlFlowOfGame.currentActivePlayer.getPlayerMarker(),
+          1
+        );
       } else {
         console.log(`Not empty at index: ${index}`);
       }
@@ -50,32 +58,27 @@ const GameBoard = (() => {
   return { getGameBoard, printToConsole, isCellAvailable };
 })();
 
-GameBoard.printToConsole();
-
 // Control flow and state of the game's turn and checking if anyone won
 const GameController = (() => {
-  // Players stored in objects
   const players = {
     playerOne: Player('John', 'X', 0),
     playerTwo: Player('Shani', 'O', 0),
   };
 
-  // Object that will control flow of the game
   const controlFlowOfGame = {
     gameActive: true,
-    playerTurn: null,
+    currentActivePlayer: players.playerOne,
   };
-
-  return { players };
+  return { controlFlowOfGame };
 })();
 
 // ONLY FOR DOM
 const displayController = (() => {
   const renderBoard = () => {
-    const boardContainer = document.querySelector('.boardContainer');
+    const boardContainerElement = document.querySelector('.boardContainer');
 
-    boardContainer.appendChild(createBoard(GameBoard.getGameBoard()));
-    return boardContainer;
+    boardContainerElement.appendChild(createBoard(GameBoard.getGameBoard()));
+    return boardContainerElement;
   };
 
   const createBoard = (gameBoardArr) => {
@@ -103,10 +106,13 @@ const displayController = (() => {
     return tableContainer;
   };
 
+  // will update DOM Board
+  const updateBoard = () => {};
+
   return { renderBoard };
 })();
 
-console.log(GameController.players.playerOne.getPlayerName());
+GameBoard.printToConsole();
 displayController.renderBoard();
 GameBoard.isCellAvailable();
 
