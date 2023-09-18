@@ -94,6 +94,7 @@ const displayController = (() => {
         for (let row = 0; row < gameBoardArr.length; row += 1) {
           if (row % 3 == 0) {
             const newCell = newRow.insertCell();
+            newCell.classList.add('square');
 
             const newText = document.createTextNode(gameBoardArr[startCount++]);
 
@@ -106,15 +107,32 @@ const displayController = (() => {
     return tableContainer;
   };
 
+  const BoardClickable = () => {
+    // We need to grab all squares on the board and turn them into event listeners
+    const allSquares = document.querySelectorAll('.square');
+
+    const allSquaresToArray = [...allSquares];
+
+    allSquaresToArray.forEach((square, index) => {
+      square.setAttribute('data-id', index);
+      square.addEventListener('click', (e) => {
+        const squareID = e.target.dataset.id;
+        GameBoard.printToConsole();
+        return squareID;
+      });
+    });
+  };
+
   // will update DOM Board
   const updateBoard = () => {};
 
-  return { renderBoard };
+  return { renderBoard, BoardClickable };
 })();
 
 GameBoard.printToConsole();
 displayController.renderBoard();
 GameBoard.isCellAvailable();
+displayController.BoardClickable();
 
 // Little global code as possible (Use factory or module)
 // If you ever need one of something, use a module
