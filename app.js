@@ -43,10 +43,6 @@ const GameBoard = (() => {
       if (element === '') {
         console.log(`Empty at index: ${index}`);
         // now we can allow the player who's active to place their marker
-        placeMarker(
-          GameController.controlFlowOfGame.currentActivePlayer.getPlayerMarker(),
-          1
-        );
       } else {
         console.log(`Not empty at index: ${index}`);
       }
@@ -55,7 +51,7 @@ const GameBoard = (() => {
     console.log(currentGameBoard);
   };
 
-  return { getGameBoard, printToConsole, isCellAvailable };
+  return { getGameBoard, printToConsole, isCellAvailable, placeMarker };
 })();
 
 // Control flow and state of the game's turn and checking if anyone won
@@ -118,7 +114,10 @@ const displayController = (() => {
       square.addEventListener('click', (e) => {
         const squareID = e.target.dataset.id;
         GameBoard.printToConsole();
-        return squareID;
+        placeMarker(
+          GameController.controlFlowOfGame.currentActivePlayer.getPlayerMarker(),
+          squareID
+        );
       });
     });
   };
