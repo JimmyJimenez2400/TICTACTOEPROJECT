@@ -42,6 +42,7 @@ const GameBoard = (() => {
     currentGameBoard.filter((element, index, arr) => {
       if (element === '') {
         console.log(`Empty at index: ${index}`);
+
         // now we can allow the player who's active to place their marker
       } else {
         console.log(`Not empty at index: ${index}`);
@@ -114,16 +115,19 @@ const displayController = (() => {
       square.addEventListener('click', (e) => {
         const squareID = e.target.dataset.id;
         GameBoard.printToConsole();
-        placeMarker(
+        GameBoard.placeMarker(
           GameController.controlFlowOfGame.currentActivePlayer.getPlayerMarker(),
           squareID
         );
+        updateBoard();
       });
     });
   };
 
   // will update DOM Board
-  const updateBoard = () => {};
+  const updateBoard = () => {
+    
+  };
 
   return { renderBoard, BoardClickable };
 })();
