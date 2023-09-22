@@ -24,7 +24,7 @@ const GameBoard = (() => {
 
   const placeMarker = (playerMarker, placement) => {
     // const playerMarker = player.getPlayerMarker();
-    console.log(placement);
+
     // in here we'll get the active player marker or save it's value
 
     let board = getGameBoard();
@@ -48,8 +48,6 @@ const GameBoard = (() => {
         console.log(`Not empty at index: ${index}`);
       }
     });
-
-    console.log(currentGameBoard);
   };
 
   return { getGameBoard, printToConsole, isCellAvailable, placeMarker };
@@ -71,13 +69,6 @@ const GameController = (() => {
 
 // ONLY FOR DOM
 const displayController = (() => {
-  const renderBoard = () => {
-    const boardContainerElement = document.querySelector('.boardContainer');
-
-    boardContainerElement.appendChild(createBoard(GameBoard.getGameBoard()));
-    return boardContainerElement;
-  };
-
   const createBoard = (gameBoardArr) => {
     const tableContainer = document.createElement('table');
 
@@ -104,6 +95,13 @@ const displayController = (() => {
     return tableContainer;
   };
 
+  const renderBoard = () => {
+    const boardContainerElement = document.querySelector('.boardContainer');
+
+    boardContainerElement.appendChild(createBoard(GameBoard.getGameBoard()));
+    return boardContainerElement;
+  };
+
   const BoardClickable = () => {
     // We need to grab all squares on the board and turn them into event listeners
     const allSquares = document.querySelectorAll('.square');
@@ -114,29 +112,28 @@ const displayController = (() => {
       square.setAttribute('data-id', index);
       square.addEventListener('click', (e) => {
         const squareID = e.target.dataset.id;
-        GameBoard.printToConsole();
         GameBoard.placeMarker(
           GameController.controlFlowOfGame.currentActivePlayer.getPlayerMarker(),
           squareID
         );
-        updateBoard();
+        displayController.updateBoard();
       });
     });
   };
 
   // will update DOM Board
   const updateBoard = () => {
-    
+    // There needs to be someway to be able to tie the gameBoard array elements value as textContext to the squares
+    const gameBoard = GameBoard.getGameBoard();
+    for (let i = 0; i < gameBoard.length; i++) {
+      console.log(gameBoard[i]);
+    }
   };
 
-  return { renderBoard, BoardClickable };
+  return { renderBoard, BoardClickable, updateBoard };
 })();
 
 GameBoard.printToConsole();
 displayController.renderBoard();
 GameBoard.isCellAvailable();
 displayController.BoardClickable();
-
-// Little global code as possible (Use factory or module)
-// If you ever need one of something, use a module
-// If you need multiple of something, use factories
