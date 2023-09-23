@@ -64,7 +64,22 @@ const GameController = (() => {
     gameActive: true,
     currentActivePlayer: players.playerOne,
   };
-  return { controlFlowOfGame };
+
+  const switchActivePlayer = () => {
+    // This will switch the activePlayer
+    console.log(controlFlowOfGame.currentActivePlayer === players.playerOne);
+
+    if (controlFlowOfGame.currentActivePlayer === players.playerOne) {
+      console.log('Switching to playerTwo');
+      controlFlowOfGame.currentActivePlayer = players.playerTwo;
+      console.log(controlFlowOfGame.currentActivePlayer.getPlayerName());
+    } else {
+      console.log('Switching to playerOne');
+      controlFlowOfGame.currentActivePlayer = players.playerOne;
+      console.log(controlFlowOfGame.currentActivePlayer.getPlayerName());
+    }
+  };
+  return { controlFlowOfGame, switchActivePlayer };
 })();
 
 // ONLY FOR DOM
@@ -137,3 +152,6 @@ GameBoard.printToConsole();
 displayController.renderBoard();
 GameBoard.isCellAvailable();
 displayController.BoardClickable();
+GameBoard.placeMarker('O', 0);
+GameController.switchActivePlayer();
+GameController.switchActivePlayer();
