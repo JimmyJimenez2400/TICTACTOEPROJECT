@@ -4,9 +4,20 @@ const Player = (playerName, marker, score) => {
 
   const getPlayerMarker = () => marker;
 
-  const getPlayerScore = () => score;
+  let getPlayerScore = () => score;
 
-  return { getPlayerName, getPlayerMarker, getPlayerScore };
+  let increasePlayerScore = () => {
+    // just increase the score
+    score = ++score;
+    console.log(score);
+  };
+
+  return {
+    getPlayerName,
+    getPlayerMarker,
+    getPlayerScore,
+    increasePlayerScore,
+  };
 };
 
 // store gameboard inside an array inside of a Gameboard Object, Module Pattern
@@ -64,6 +75,9 @@ const GameController = (() => {
     gameActive: true,
     currentActivePlayer: players.playerOne,
   };
+
+  controlFlowOfGame.currentActivePlayer.increasePlayerScore();
+  controlFlowOfGame.currentActivePlayer.increasePlayerScore();
 
   const switchActivePlayer = () => {
     // This will switch the activePlayer
@@ -149,9 +163,5 @@ const displayController = (() => {
 })();
 
 GameBoard.printToConsole();
-displayController.renderBoard();
 GameBoard.isCellAvailable();
-displayController.BoardClickable();
 GameBoard.placeMarker('O', 0);
-GameController.switchActivePlayer();
-GameController.switchActivePlayer();
