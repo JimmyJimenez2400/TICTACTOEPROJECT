@@ -42,7 +42,7 @@ const GameBoard = (() => {
 
     board[placement] = playerMarker;
 
-    return printToConsole();
+    printToConsole();
   };
 
   const isCellAvailable = (indexValueSelected) => {
@@ -50,14 +50,14 @@ const GameBoard = (() => {
 
     if (currentGameBoard[indexValueSelected] === '') {
       placeMarker(
-        GameController.controlFlowOfGame.currentActivePlayer.getPlayerMarker(),
+        GameController.statusOf.currentActivePlayer.getPlayerMarker(),
         indexValueSelected
       );
       return GameController.switchActivePlayer();
     } else {
       console.log(`Sorry, that index isn't available! Pick another one!`);
       console.log(
-        `Still your turn ${GameController.controlFlowOfGame.currentActivePlayer.getPlayerName()}`
+        `Still your turn ${GameController.statusOf.currentActivePlayer.getPlayerName()}`
       );
     }
   };
@@ -72,27 +72,33 @@ const GameController = (() => {
     playerTwo: Player('Shani', 'O', 0),
   };
 
-  const controlFlowOfGame = {
-    gameActive: true,
+  //statusOf should be calling the functions not be the status's
+
+  const controlFlowOfGame = () => {
+    // Controls flow of game but still need to test
+  };
+
+  const statusOf = {
+    game: true,
     currentActivePlayer: players.playerOne,
   };
 
   const switchActivePlayer = () => {
     // This will switch the activePlayer
-    console.log(controlFlowOfGame.currentActivePlayer === players.playerOne);
+    console.log(statusOf.currentActivePlayer === players.playerOne);
 
-    if (controlFlowOfGame.currentActivePlayer === players.playerOne) {
+    if (statusOf.currentActivePlayer === players.playerOne) {
       console.log('Switching to playerTwo');
-      controlFlowOfGame.currentActivePlayer = players.playerTwo;
-      console.log(controlFlowOfGame.currentActivePlayer.getPlayerName());
+      statusOf.currentActivePlayer = players.playerTwo;
+      console.log(statusOf.currentActivePlayer.getPlayerName());
     } else {
       console.log('Switching to playerOne');
-      controlFlowOfGame.currentActivePlayer = players.playerOne;
-      console.log(controlFlowOfGame.currentActivePlayer.getPlayerName());
+      statusOf.currentActivePlayer = players.playerOne;
+      console.log(statusOf.currentActivePlayer.getPlayerName());
     }
   };
 
-  return { controlFlowOfGame, switchActivePlayer };
+  return { statusOf, switchActivePlayer, controlFlowOfGame };
 })();
 
 // ONLY FOR DOM
@@ -141,7 +147,7 @@ const displayController = (() => {
       square.addEventListener('click', (e) => {
         const squareID = e.target.dataset.id;
         GameBoard.placeMarker(
-          GameController.controlFlowOfGame.currentActivePlayer.getPlayerMarker(),
+          GameController.statusOf.currentActivePlayer.getPlayerMarker(),
           squareID
         );
         displayController.updateBoard();
@@ -169,3 +175,7 @@ GameBoard.isCellAvailable(0);
 // Still shani turn
 
 GameBoard.isCellAvailable(1);
+
+GameBoard.isCellAvailable(2);
+
+GameBoard.isCellAvailable(5);
