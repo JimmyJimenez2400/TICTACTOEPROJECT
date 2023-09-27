@@ -91,6 +91,7 @@ const GameController = (() => {
       console.log(controlFlowOfGame.currentActivePlayer.getPlayerName());
     }
   };
+
   return { controlFlowOfGame, switchActivePlayer };
 })();
 
