@@ -42,23 +42,24 @@ const GameBoard = (() => {
 
     board[placement] = playerMarker;
 
-    printToConsole();
+    return printToConsole();
   };
 
-  const isCellAvailable = () => {
-    // We need to check if the array element value is '' (empty string), if so it's valid and we can PLACE MARKER
-    // If not, we return with an error message
+  const isCellAvailable = (indexValueSelected) => {
     const currentGameBoard = getGameBoard();
 
-    currentGameBoard.filter((element, index, arr) => {
-      if (element === '') {
-        console.log(`Empty at index: ${index}`);
-
-        // now we can allow the player who's active to place their marker
-      } else {
-        console.log(`Not empty at index: ${index}`);
-      }
-    });
+    if (currentGameBoard[indexValueSelected] === '') {
+      placeMarker(
+        GameController.controlFlowOfGame.currentActivePlayer.getPlayerMarker(),
+        indexValueSelected
+      );
+      return GameController.switchActivePlayer();
+    } else {
+      console.log(`Sorry, that index isn't available! Pick another one!`);
+      console.log(
+        `Still your turn ${GameController.controlFlowOfGame.currentActivePlayer.getPlayerName()}`
+      );
+    }
   };
 
   return { getGameBoard, printToConsole, isCellAvailable, placeMarker };
@@ -75,9 +76,6 @@ const GameController = (() => {
     gameActive: true,
     currentActivePlayer: players.playerOne,
   };
-
-  controlFlowOfGame.currentActivePlayer.increasePlayerScore();
-  controlFlowOfGame.currentActivePlayer.increasePlayerScore();
 
   const switchActivePlayer = () => {
     // This will switch the activePlayer
@@ -162,8 +160,11 @@ const displayController = (() => {
   return { renderBoard, BoardClickable, updateBoard };
 })();
 
-GameBoard.printToConsole();
-GameBoard.isCellAvailable();
-GameBoard.placeMarker('O', 0);
+//John,players switch
+GameBoard.isCellAvailable(0);
 
+//Shani turn, picks same index as John
+GameBoard.isCellAvailable(0);
+// Still shani turn
 
+GameBoard.isCellAvailable(1);
