@@ -27,6 +27,7 @@ const GameBoard = (() => {
   let gameBoard = ['', '', '', '', '', '', '', '', ''];
 
   const getGameBoard = () => gameBoard;
+  // LOL
 
   const printToConsole = () => {
     // we need a way to print the gameBoard array to console
