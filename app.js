@@ -12,11 +12,16 @@ const Player = (playerName, marker, score) => {
     console.log(score);
   };
 
+  let playerStorage = [];
+
+  const getPlayerStorage = () => playerStorage;
+
   return {
     getPlayerName,
     getPlayerMarker,
     getPlayerScore,
     increasePlayerScore,
+    getPlayerStorage,
   };
 };
 
