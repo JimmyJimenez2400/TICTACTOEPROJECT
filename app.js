@@ -9,14 +9,25 @@ const Player = (playerName, marker, score) => {
   let increasePlayerScore = () => {
     // just increase the score
     score = ++score;
-    console.log(score);
   };
+
+  // This will be the players Storage
+  let playerStorage = [];
+
+  const pushToStorage = (index) => {
+    playerStorage.push(index);
+  };
+
+  //retrieve storage
+  const getPlayerStorage = () => playerStorage;
 
   return {
     getPlayerName,
     getPlayerMarker,
     getPlayerScore,
     increasePlayerScore,
+    getPlayerStorage,
+    pushToStorage,
   };
 };
 
@@ -27,6 +38,7 @@ const GameBoard = (() => {
   let gameBoard = ['', '', '', '', '', '', '', '', ''];
 
   const getGameBoard = () => gameBoard;
+  // LOL
 
   const printToConsole = () => {
     // we need a way to print the gameBoard array to console
@@ -98,7 +110,24 @@ const GameController = (() => {
     }
   };
 
-  return { statusOf, switchActivePlayer, controlFlowOfGame };
+  const testingPlayerStorage = (index) => {
+    const activePlayer = statusOf.currentActivePlayer;
+
+    console.log(activePlayer.getPlayerStorage());
+
+    activePlayer.pushToStorage(index);
+
+    console.log(
+      `${activePlayer.getPlayerName()} has index's ${activePlayer.getPlayerStorage()} in their storage`
+    );
+  };
+
+  return {
+    statusOf,
+    switchActivePlayer,
+    controlFlowOfGame,
+    testingPlayerStorage,
+  };
 })();
 
 // ONLY FOR DOM
@@ -167,15 +196,4 @@ const displayController = (() => {
   return { renderBoard, BoardClickable, updateBoard };
 })();
 
-//John,players switch
-GameBoard.isCellAvailable(0);
 
-//Shani turn, picks same index as John
-GameBoard.isCellAvailable(0);
-// Still shani turn
-
-GameBoard.isCellAvailable(1);
-
-GameBoard.isCellAvailable(2);
-
-GameBoard.isCellAvailable(5);
