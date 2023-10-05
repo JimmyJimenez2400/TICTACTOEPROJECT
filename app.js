@@ -119,6 +119,7 @@ const GameController = (() => {
       if (isSubset(VerticalConditions[i], currentPlayerStorage)) {
         console.log(`${VerticalConditions[i]}`);
         console.log('MATCH');
+        player.increasePlayerScore();
         return true;
       } else {
         console.log('NO MATCH');
@@ -139,6 +140,7 @@ const GameController = (() => {
       if (isSubset(horizontalConditions[i], currentPlayerStorage)) {
         console.log('MATCH FOUND');
         console.log(`${horizontalConditions[i]}`);
+        player.increasePlayerScore();
         return true;
       } else {
         console.log('NO MATCH!');
@@ -158,6 +160,7 @@ const GameController = (() => {
       if (isSubset(diagonalWin[i], currentPlayerStorage)) {
         console.log('MATCH FOUND');
         console.log(`${diagonalWin[i]}`);
+        player.increasePlayerScore();
         return true;
       } else {
         console.log('NO MATCH!');
