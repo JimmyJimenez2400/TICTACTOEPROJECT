@@ -169,8 +169,13 @@ const GameController = (() => {
 
   //statusOf should be calling the functions not be the status's
 
-  const controlFlowOfGame = () => {
+  const controlFlowOfGame = (playerChoice) => {
     // Controls flow of game but still need to test
+    while (statusOf.game === true) {
+      //We want to essentially go through the game in order:
+      //1.
+      GameBoard.isCellAvailable(playerChoice);
+    }
   };
 
   const statusOf = {
