@@ -84,6 +84,51 @@ const GameController = (() => {
     playerTwo: Player('Shani', 'O', 0),
   };
 
+  //for every move, we wanna check if it's a vertical, horizontal, or diagonal win
+
+  const winConditions = {
+    vertical: [
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+    ],
+    horizontal: [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+    ],
+    diagonally: [
+      [0, 4, 8],
+      [2, 4, 6],
+    ],
+  };
+
+  const isSubset = (winConditions, playerStorage) => {
+    return winConditions.every((element) => playerStorage.includes(element));
+  };
+
+  const checkIfVerticalWin = (player) => {
+    // Mission: We want to see if there is a match between playerStorage and winCondition for vertical
+
+    let VerticalConditions = winConditions.vertical;
+
+    for (let i = 0; i < VerticalConditions.length; i++) {
+      let currentPlayerStorage = player.getPlayerStorage();
+      console.log(`Player Storage: ${currentPlayerStorage}`);
+
+      if (isSubset(VerticalConditions[i], currentPlayerStorage)) {
+        console.log(`${VerticalConditions[i]}`);
+        console.log('MATCH');
+        return true;
+      } else {
+        console.log('NO MATCH');
+        console.log(`${VerticalConditions[i]}`);
+      }
+
+      //we will need an if statement that check verticalConditions array matches with playerStorage
+    }
+  };
+
   //statusOf should be calling the functions not be the status's
 
   const controlFlowOfGame = () => {
@@ -113,13 +158,11 @@ const GameController = (() => {
   const testingPlayerStorage = (index) => {
     const activePlayer = statusOf.currentActivePlayer;
 
-    console.log(activePlayer.getPlayerStorage());
-
     activePlayer.pushToStorage(index);
 
-    console.log(
-      `${activePlayer.getPlayerName()} has index's ${activePlayer.getPlayerStorage()} in their storage`
-    );
+    // console.log(
+    //   `${activePlayer.getPlayerName()} has index's ${activePlayer.getPlayerStorage()} in their storage`
+    // );
   };
 
   return {
@@ -127,6 +170,7 @@ const GameController = (() => {
     switchActivePlayer,
     controlFlowOfGame,
     testingPlayerStorage,
+    checkIfVerticalWin,
   };
 })();
 
@@ -196,4 +240,9 @@ const displayController = (() => {
   return { renderBoard, BoardClickable, updateBoard };
 })();
 
+GameController.testingPlayerStorage(0);
+GameController.testingPlayerStorage(2);
+GameController.testingPlayerStorage(3);
+GameController.testingPlayerStorage(6);
 
+GameController.checkIfVerticalWin(GameController.statusOf.currentActivePlayer);
