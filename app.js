@@ -107,7 +107,7 @@ const GameController = (() => {
     return winConditions.every((element) => playerStorage.includes(element));
   };
 
-  const checkIfVerticalWin = (player) => {
+  const checkForVerticalWin = (player) => {
     // Mission: We want to see if there is a match between playerStorage and winCondition for vertical
 
     let VerticalConditions = winConditions.vertical;
@@ -126,6 +126,44 @@ const GameController = (() => {
       }
 
       //we will need an if statement that check verticalConditions array matches with playerStorage
+    }
+  };
+
+  const checkForHorizontalWin = (player) => {
+    let horizontalConditions = winConditions.horizontal;
+
+    for (let i = 0; i < horizontalConditions.length; i++) {
+      let currentPlayerStorage = player.getPlayerStorage();
+      console.log(`Player Storage: ${currentPlayerStorage}`);
+
+      if (isSubset(horizontalConditions[i], currentPlayerStorage)) {
+        console.log('MATCH FOUND');
+        console.log(`${horizontalConditions[i]}`);
+        return true;
+      } else {
+        console.log('NO MATCH!');
+        console.log(`${horizontalConditions[i]}`);
+        return false;
+      }
+    }
+  };
+
+  const checkForDiagonalWin = (player) => {
+    let diagonalWin = winConditions.diagonally;
+
+    for (let i = 0; i < diagonalWin.length; i++) {
+      let currentPlayerStorage = player.getPlayerStorage();
+      console.log(`Player Storage: ${currentPlayerStorage}`);
+
+      if (isSubset(diagonalWin[i], currentPlayerStorage)) {
+        console.log('MATCH FOUND');
+        console.log(`${diagonalWin[i]}`);
+        return true;
+      } else {
+        console.log('NO MATCH!');
+        console.log(`${diagonalWin[i]}`);
+        return false;
+      }
     }
   };
 
@@ -170,7 +208,9 @@ const GameController = (() => {
     switchActivePlayer,
     controlFlowOfGame,
     testingPlayerStorage,
-    checkIfVerticalWin,
+    checkForVerticalWin,
+    checkForHorizontalWin,
+    checkForDiagonalWin,
   };
 })();
 
@@ -244,5 +284,10 @@ GameController.testingPlayerStorage(0);
 GameController.testingPlayerStorage(2);
 GameController.testingPlayerStorage(3);
 GameController.testingPlayerStorage(6);
+GameController.testingPlayerStorage(1);
 
-GameController.checkIfVerticalWin(GameController.statusOf.currentActivePlayer);
+GameController.checkForVerticalWin(GameController.statusOf.currentActivePlayer);
+GameController.checkForHorizontalWin(
+  GameController.statusOf.currentActivePlayer
+);
+GameController.checkForDiagonalWin(GameController.statusOf.currentActivePlayer);
