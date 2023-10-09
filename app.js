@@ -38,23 +38,28 @@ const GameBoard = (() => {
   let gameBoard = ['', '', '', '', '', '', '', '', ''];
 
   const getGameBoard = () => gameBoard;
-  // LOL
 
   const printToConsole = () => {
     // we need a way to print the gameBoard array to console
     console.log(getGameBoard());
   };
 
-  const placeMarker = (playerMarker, placement) => {
+  const placeMarker = (currentPlayer, placement) => {
     // const playerMarker = player.getPlayerMarker();
 
     // in here we'll get the active player marker or save it's value
 
     let board = getGameBoard();
 
+    let activePlayer = currentPlayer;
+
+    let playerMarker = currentPlayer.getPlayerMarker();
+
     board[placement] = playerMarker;
 
-    printToConsole();
+    activePlayer.pushToStorage(placement);
+
+    printToConsole()
   };
 
   const isCellAvailable = (indexValueSelected) => {
@@ -62,9 +67,10 @@ const GameBoard = (() => {
 
     if (currentGameBoard[indexValueSelected] === '') {
       placeMarker(
-        GameController.statusOf.currentActivePlayer.getPlayerMarker(),
+        GameController.statusOf.currentActivePlayer,
         indexValueSelected
       );
+
       return GameController.switchActivePlayer();
     } else {
       console.log(`Sorry, that index isn't available! Pick another one!`);
@@ -82,6 +88,11 @@ const GameController = (() => {
   const players = {
     playerOne: Player('John', 'X', 0),
     playerTwo: Player('Shani', 'O', 0),
+  };
+
+  const statusOf = {
+    game: true,
+    currentActivePlayer: players.playerOne,
   };
 
   //for every move, we wanna check if it's a vertical, horizontal, or diagonal win
@@ -172,18 +183,23 @@ const GameController = (() => {
 
   //statusOf should be calling the functions not be the status's
 
-  const controlFlowOfGame = (playerChoice) => {
+  const controlFlowOfGame = () => {
     // Controls flow of game but still need to test
-    while (statusOf.game === true) {
-      //We want to essentially go through the game in order:
-      //1.
-      GameBoard.isCellAvailable(playerChoice);
-    }
-  };
 
-  const statusOf = {
-    game: true,
-    currentActivePlayer: players.playerOne,
+    let playerChoice = prompt(
+      'Please enter a number to place marker on board(0-9):'
+    );
+    GameBoard.isCellAvailable(playerChoice);
+
+    if (checkForVerticalWin(statusOf.currentActivePlayer) === true) {
+      console.log('VERTICAL CALLED');
+    } else if (checkForDiagonalWin(statusOf.currentActivePlayer) === true) {
+      console.log('DIAGONAL CALLED');
+    } else if (checkForHorizontalWin(statusOf.currentActivePlayer) === true) {
+      console.log('HORIZONTAL CALLED');
+    } else {
+      console.log('ERROR');
+    }
   };
 
   const switchActivePlayer = () => {
@@ -201,24 +217,10 @@ const GameController = (() => {
     }
   };
 
-  const testingPlayerStorage = (index) => {
-    const activePlayer = statusOf.currentActivePlayer;
-
-    activePlayer.pushToStorage(index);
-
-    // console.log(
-    //   `${activePlayer.getPlayerName()} has index's ${activePlayer.getPlayerStorage()} in their storage`
-    // );
-  };
-
   return {
-    statusOf,
-    switchActivePlayer,
     controlFlowOfGame,
-    testingPlayerStorage,
-    checkForVerticalWin,
-    checkForHorizontalWin,
-    checkForDiagonalWin,
+    switchActivePlayer,
+    statusOf,
   };
 })();
 
@@ -288,14 +290,8 @@ const displayController = (() => {
   return { renderBoard, BoardClickable, updateBoard };
 })();
 
-GameController.testingPlayerStorage(0);
-GameController.testingPlayerStorage(2);
-GameController.testingPlayerStorage(3);
-GameController.testingPlayerStorage(6);
-GameController.testingPlayerStorage(1);
-
-GameController.checkForVerticalWin(GameController.statusOf.currentActivePlayer);
-GameController.checkForHorizontalWin(
-  GameController.statusOf.currentActivePlayer
-);
-GameController.checkForDiagonalWin(GameController.statusOf.currentActivePlayer);
+GameController.controlFlowOfGame();
+GameController.controlFlowOfGame();
+GameController.controlFlowOfGame();
+GameController.controlFlowOfGame();
+GameController.controlFlowOfGame();
