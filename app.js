@@ -21,6 +21,10 @@ const Player = (playerName, marker, score) => {
   //retrieve storage
   const getPlayerStorage = () => playerStorage;
 
+  const resetPlayerStorage = () => {
+    playerStorage = [];
+  };
+
   return {
     getPlayerName,
     getPlayerMarker,
@@ -28,6 +32,7 @@ const Player = (playerName, marker, score) => {
     increasePlayerScore,
     getPlayerStorage,
     pushToStorage,
+    resetPlayerStorage,
   };
 };
 
@@ -44,6 +49,10 @@ const GameBoard = (() => {
     console.log(getGameBoard());
   };
 
+  const resetGameBoard = () => {
+    gameBoard = ['', '', '', '', '', '', '', '', ''];
+  };
+
   const placeMarker = (currentPlayer, placement) => {
     // const playerMarker = player.getPlayerMarker();
 
@@ -52,6 +61,7 @@ const GameBoard = (() => {
     let board = getGameBoard();
 
     let activePlayer = currentPlayer;
+    console.log(`this is the active player: ${activePlayer.getPlayerName()}`);
 
     let playerMarker = currentPlayer.getPlayerMarker();
 
@@ -59,19 +69,18 @@ const GameBoard = (() => {
 
     activePlayer.pushToStorage(placement);
 
-    printToConsole()
+    console.log(
+      `${activePlayer.getPlayerName()} storage: ${activePlayer.getPlayerStorage()}`
+    );
   };
 
   const isCellAvailable = (indexValueSelected) => {
+    let indexNumber = parseInt(indexValueSelected);
+
     const currentGameBoard = getGameBoard();
 
-    if (currentGameBoard[indexValueSelected] === '') {
-      placeMarker(
-        GameController.statusOf.currentActivePlayer,
-        indexValueSelected
-      );
-
-      return GameController.switchActivePlayer();
+    if (currentGameBoard[indexNumber] === '') {
+      placeMarker(GameController.statusOf.currentActivePlayer, indexNumber);
     } else {
       console.log(`Sorry, that index isn't available! Pick another one!`);
       console.log(
@@ -80,7 +89,13 @@ const GameBoard = (() => {
     }
   };
 
-  return { getGameBoard, printToConsole, isCellAvailable, placeMarker };
+  return {
+    getGameBoard,
+    printToConsole,
+    isCellAvailable,
+    placeMarker,
+    resetGameBoard,
+  };
 })();
 
 // Control flow and state of the game's turn and checking if anyone won
@@ -118,19 +133,35 @@ const GameController = (() => {
     return winConditions.every((element) => playerStorage.includes(element));
   };
 
-  const checkForVerticalWin = (player) => {
-    // Mission: We want to see if there is a match between playerStorage and winCondition for vertical
+  const switchActivePlayer = () => {
+    // This will switch the activePlayer
+    console.log(statusOf.currentActivePlayer === players.playerOne);
 
+    if (statusOf.currentActivePlayer === players.playerOne) {
+      console.log('Switching to playerTwo');
+      statusOf.currentActivePlayer = players.playerTwo;
+      console.log(statusOf.currentActivePlayer.getPlayerName());
+    } else {
+      console.log('Switching to playerOne');
+      statusOf.currentActivePlayer = players.playerOne;
+      console.log(statusOf.currentActivePlayer.getPlayerName());
+    }
+  };
+
+  const checkForVerticalWin = (player) => {
     let VerticalConditions = winConditions.vertical;
 
     for (let i = 0; i < VerticalConditions.length; i++) {
       let currentPlayerStorage = player.getPlayerStorage();
-      console.log(`Player Storage: ${currentPlayerStorage}`);
+      console.log(`${player.getPlayerName()} storage: ${currentPlayerStorage}`);
 
       if (isSubset(VerticalConditions[i], currentPlayerStorage)) {
         console.log(`${VerticalConditions[i]}`);
         console.log('MATCH');
         player.increasePlayerScore();
+        console.log(
+          `${player.getPlayerName()} has ${player.getPlayerScore()} points!`
+        );
         return true;
       } else {
         console.log('NO MATCH');
@@ -146,12 +177,16 @@ const GameController = (() => {
 
     for (let i = 0; i < horizontalConditions.length; i++) {
       let currentPlayerStorage = player.getPlayerStorage();
-      console.log(`Player Storage: ${currentPlayerStorage}`);
+      console.log(`${player.getPlayerName()} Storage: ${currentPlayerStorage}`);
 
       if (isSubset(horizontalConditions[i], currentPlayerStorage)) {
         console.log('MATCH FOUND');
         console.log(`${horizontalConditions[i]}`);
         player.increasePlayerScore();
+        console.log(
+          `${player.getPlayerName()} has ${player.getPlayerScore()} points!`
+        );
+        // restart game with score still intact
         return true;
       } else {
         console.log('NO MATCH!');
@@ -166,12 +201,15 @@ const GameController = (() => {
 
     for (let i = 0; i < diagonalWin.length; i++) {
       let currentPlayerStorage = player.getPlayerStorage();
-      console.log(`Player Storage: ${currentPlayerStorage}`);
+      console.log(`${player.getPlayerName()} storage: ${currentPlayerStorage}`);
 
       if (isSubset(diagonalWin[i], currentPlayerStorage)) {
         console.log('MATCH FOUND');
         console.log(`${diagonalWin[i]}`);
         player.increasePlayerScore();
+        console.log(
+          `${player.getPlayerName()} has ${player.getPlayerScore()} points!`
+        );
         return true;
       } else {
         console.log('NO MATCH!');
@@ -181,6 +219,47 @@ const GameController = (() => {
     }
   };
 
+  const isGameOver = () => {
+    if (players.playerOne.getPlayerScore() === 5) {
+      statusOf.game = false;
+      console.log(`${statusOf.playerOne.getPlayerName()} has won the game!`);
+      return true;
+    } else if (players.playerTwo.getPlayerScore() === 5) {
+      statusOf.game = false;
+      console.log(`${statusOf.playerTwo.getPlayerName()} has won the game!`);
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const resetPlayerStorage = () => {
+    players.playerOne.resetPlayerStorage();
+    players.playerTwo.resetPlayerStorage();
+  };
+
+  const isRoundOver = () => {
+    // I'm checking if gameBoard array does not equal empty strings for each element
+
+    for (let i = 0; i < GameBoard.getGameBoard(); i++) {
+      console.log(GameBoard.getGameBoard()[i]);
+    }
+
+    // check if player finds a match in winCondition, return true
+    if (
+      checkForDiagonalWin(statusOf.currentActivePlayer) === true ||
+      checkForHorizontalWin(statusOf.currentActivePlayer) === true ||
+      checkForVerticalWin(statusOf.currentActivePlayer) === true
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const newRound = () => {
+    GameBoard.resetGameBoard();
+    resetPlayerStorage();
+  };
   //statusOf should be calling the functions not be the status's
 
   const controlFlowOfGame = () => {
@@ -189,32 +268,28 @@ const GameController = (() => {
     let playerChoice = prompt(
       'Please enter a number to place marker on board(0-9):'
     );
+
     GameBoard.isCellAvailable(playerChoice);
 
-    if (checkForVerticalWin(statusOf.currentActivePlayer) === true) {
-      console.log('VERTICAL CALLED');
-    } else if (checkForDiagonalWin(statusOf.currentActivePlayer) === true) {
-      console.log('DIAGONAL CALLED');
-    } else if (checkForHorizontalWin(statusOf.currentActivePlayer) === true) {
-      console.log('HORIZONTAL CALLED');
-    } else {
-      console.log('ERROR');
-    }
-  };
+    switchActivePlayer();
 
-  const switchActivePlayer = () => {
-    // This will switch the activePlayer
-    console.log(statusOf.currentActivePlayer === players.playerOne);
-
-    if (statusOf.currentActivePlayer === players.playerOne) {
-      console.log('Switching to playerTwo');
-      statusOf.currentActivePlayer = players.playerTwo;
-      console.log(statusOf.currentActivePlayer.getPlayerName());
-    } else {
-      console.log('Switching to playerOne');
-      statusOf.currentActivePlayer = players.playerOne;
-      console.log(statusOf.currentActivePlayer.getPlayerName());
+    if (isRoundOver() === true) {
+      newRound();
+      console.log(`GAMEBOARD: ${GameBoard.getGameBoard()}`);
     }
+
+    // if (roundOver() === true) {
+    //   newRound();
+    // }
+
+    if (isGameOver()) {
+      // stop game
+      console.log('GAME HAS ENDED');
+    }
+
+    console.log('GOING AGAIN!');
+    //call placemarker, we check if isAvailable, place marker and update board
+    //
   };
 
   return {
@@ -290,8 +365,11 @@ const displayController = (() => {
   return { renderBoard, BoardClickable, updateBoard };
 })();
 
-GameController.controlFlowOfGame();
-GameController.controlFlowOfGame();
-GameController.controlFlowOfGame();
-GameController.controlFlowOfGame();
-GameController.controlFlowOfGame();
+GameController.controlFlowOfGame(); // 0
+GameController.controlFlowOfGame(); // 1
+GameController.controlFlowOfGame(); // 3
+GameController.controlFlowOfGame(); // 8
+GameController.controlFlowOfGame(); // 4
+GameController.controlFlowOfGame(); // 7
+GameController.controlFlowOfGame(); // 6
+GameController.controlFlowOfGame(); // 2
