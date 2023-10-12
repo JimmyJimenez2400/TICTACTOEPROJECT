@@ -101,7 +101,7 @@ const GameBoard = (() => {
 // Control flow and state of the game's turn and checking if anyone won
 const GameController = (() => {
   const players = {
-    playerOne: Player('John', 'X', 0),
+    playerOne: Player('John', 'X', 4),
     playerTwo: Player('Shani', 'O', 0),
   };
 
@@ -222,11 +222,11 @@ const GameController = (() => {
   const isGameOver = () => {
     if (players.playerOne.getPlayerScore() === 5) {
       statusOf.game = false;
-      console.log(`${statusOf.playerOne.getPlayerName()} has won the game!`);
+      console.log(`${players.playerOne.getPlayerName()} has won the game!`);
       return true;
     } else if (players.playerTwo.getPlayerScore() === 5) {
       statusOf.game = false;
-      console.log(`${statusOf.playerTwo.getPlayerName()} has won the game!`);
+      console.log(`${players.playerTwo.getPlayerName()} has won the game!`);
       return true;
     } else {
       return false;
@@ -259,15 +259,12 @@ const GameController = (() => {
   const newRound = () => {
     GameBoard.resetGameBoard();
     resetPlayerStorage();
+    displayController.resetDOMBoard();
   };
   //statusOf should be calling the functions not be the status's
 
-  const controlFlowOfGame = () => {
+  const controlFlowOfGame = (playerChoice) => {
     // Controls flow of game but still need to test
-
-    let playerChoice = prompt(
-      'Please enter a number to place marker on board(0-9):'
-    );
 
     GameBoard.isCellAvailable(playerChoice);
 
@@ -275,7 +272,6 @@ const GameController = (() => {
 
     if (isRoundOver() === true) {
       newRound();
-      console.log(`GAMEBOARD: ${GameBoard.getGameBoard()}`);
     }
 
     // if (roundOver() === true) {
@@ -344,32 +340,28 @@ const displayController = (() => {
       square.setAttribute('data-id', index);
       square.addEventListener('click', (e) => {
         const squareID = e.target.dataset.id;
-        GameBoard.placeMarker(
-          GameController.statusOf.currentActivePlayer.getPlayerMarker(),
-          squareID
-        );
-        displayController.updateBoard();
+
+        GameController.controlFlowOfGame(squareID);
+        console.log(GameBoard.getGameBoard());
+        let gameBoard = GameBoard.getGameBoard();
+
+        square.textContent = gameBoard[index];
       });
     });
   };
 
-  // will update DOM Board
-  const updateBoard = () => {
-    // There needs to be someway to be able to tie the gameBoard array elements value as textContext to the squares
-    const gameBoard = GameBoard.getGameBoard();
-    for (let i = 0; i < gameBoard.length; i++) {
-      console.log(gameBoard[i]);
-    }
+  const resetDOMBoard = () => {
+    const allSquares = document.querySelectorAll('.square');
+
+    const allSquaresToArray = [...allSquares];
+
+    allSquaresToArray.forEach((square) => {
+      square.textContent = '';
+    });
   };
 
-  return { renderBoard, BoardClickable, updateBoard };
+  return { renderBoard, BoardClickable, resetDOMBoard };
 })();
 
-GameController.controlFlowOfGame(); // 0
-GameController.controlFlowOfGame(); // 1
-GameController.controlFlowOfGame(); // 3
-GameController.controlFlowOfGame(); // 8
-GameController.controlFlowOfGame(); // 4
-GameController.controlFlowOfGame(); // 7
-GameController.controlFlowOfGame(); // 6
-GameController.controlFlowOfGame(); // 2
+displayController.renderBoard();
+displayController.BoardClickable();
