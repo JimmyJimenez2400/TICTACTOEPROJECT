@@ -81,6 +81,7 @@ const GameBoard = (() => {
 
     if (currentGameBoard[indexNumber] === '') {
       placeMarker(GameController.statusOf.currentActivePlayer, indexNumber);
+      return GameController.switchActivePlayer();
     } else {
       console.log(`Sorry, that index isn't available! Pick another one!`);
       console.log(
@@ -101,7 +102,7 @@ const GameBoard = (() => {
 // Control flow and state of the game's turn and checking if anyone won
 const GameController = (() => {
   const players = {
-    playerOne: Player('John', 'X', 4),
+    playerOne: Player('John', 'X', 0),
     playerTwo: Player('Shani', 'O', 0),
   };
 
@@ -219,6 +220,19 @@ const GameController = (() => {
     }
   };
 
+  const checkForTie = () => {
+    // In order to get a tie
+    let gameBoard = GameBoard.getGameBoard();
+
+    if (gameBoard.includes('')) {
+      console.log('STILL SPACES AVAILABLE');
+      return false;
+    }
+
+    console.log('No more spaces');
+    return true;
+  };
+
   const isGameOver = () => {
     if (players.playerOne.getPlayerScore() === 5) {
       statusOf.game = false;
@@ -239,18 +253,15 @@ const GameController = (() => {
   };
 
   const isRoundOver = () => {
-    // I'm checking if gameBoard array does not equal empty strings for each element
-
-    for (let i = 0; i < GameBoard.getGameBoard(); i++) {
-      console.log(GameBoard.getGameBoard()[i]);
-    }
-
     // check if player finds a match in winCondition, return true
     if (
       checkForDiagonalWin(statusOf.currentActivePlayer) === true ||
       checkForHorizontalWin(statusOf.currentActivePlayer) === true ||
       checkForVerticalWin(statusOf.currentActivePlayer) === true
     ) {
+      return true;
+    } else if (checkForTie() === true) {
+      statusOf.currentActivePlayer = players.playerOne;
       return true;
     }
     return false;
@@ -268,24 +279,19 @@ const GameController = (() => {
 
     GameBoard.isCellAvailable(playerChoice);
 
-    switchActivePlayer();
+    // switchActivePlayer();
 
     if (isRoundOver() === true) {
       newRound();
     }
 
-    // if (roundOver() === true) {
-    //   newRound();
-    // }
-
     if (isGameOver()) {
       // stop game
       console.log('GAME HAS ENDED');
+      return 'GAME HAS ENDED';
     }
 
     console.log('GOING AGAIN!');
-    //call placemarker, we check if isAvailable, place marker and update board
-    //
   };
 
   return {
