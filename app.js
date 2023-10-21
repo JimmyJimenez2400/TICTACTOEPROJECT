@@ -261,7 +261,6 @@ const GameController = (() => {
     ) {
       return true;
     } else if (checkForTie() === true) {
-      statusOf.currentActivePlayer = players.playerOne;
       return true;
     }
     return false;
@@ -271,6 +270,7 @@ const GameController = (() => {
     GameBoard.resetGameBoard();
     resetPlayerStorage();
     displayController.resetDOMBoard();
+    statusOf.currentActivePlayer = players.playerOne;
   };
   //statusOf should be calling the functions not be the status's
 
@@ -298,6 +298,7 @@ const GameController = (() => {
     controlFlowOfGame,
     switchActivePlayer,
     statusOf,
+    players,
   };
 })();
 
@@ -352,6 +353,9 @@ const displayController = (() => {
         let gameBoard = GameBoard.getGameBoard();
 
         square.textContent = gameBoard[index];
+
+        updateScoreBoard();
+        updatePlayerTurn();
       });
     });
   };
@@ -364,6 +368,38 @@ const displayController = (() => {
     allSquaresToArray.forEach((square) => {
       square.textContent = '';
     });
+  };
+
+  const updateScoreBoard = () => {
+    // grab elements
+    const playerOneName = document.querySelector('.playerOneName');
+    const playerTwoName = document.querySelector('.playerTwoName');
+
+    const playerOneScore = document.querySelector('.playerOneScore');
+    const playerTwoScore = document.querySelector('.playerTwoScore');
+
+    console.log(playerOneScore, playerTwoScore);
+
+    playerOneName.textContent =
+      GameController.players.playerOne.getPlayerName();
+
+    playerOneScore.textContent =
+      GameController.players.playerOne.getPlayerScore();
+    //grab players scores and names
+
+    playerTwoName.textContent =
+      GameController.players.playerTwo.getPlayerName();
+    playerTwoScore.textContent =
+      GameController.players.playerTwo.getPlayerScore();
+  };
+
+  const updatePlayerTurn = () => {
+    const playerTurn = document.querySelector('.playerTurn');
+
+    let currentActivePlayer =
+      GameController.statusOf.currentActivePlayer.getPlayerName();
+
+    playerTurn.textContent = `It's ${currentActivePlayer} turn!`;
   };
 
   return { renderBoard, BoardClickable, resetDOMBoard };
