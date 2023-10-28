@@ -47,6 +47,28 @@ body {
 
 }
 
+#header {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.playerScores {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+.playerScores>* {
+  flex: 0 1 50%;
+}
+
+#header>* {
+  flex: 1;
+}
+
 .boardContainer {
   display: flex;
   height: 100%;
