@@ -3,28 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tic Tac Toe</title>
-  <script defer src="./app.js"></script>
-  <link rel="stylesheet" href="./style.css">
+  <title>Menu</title>
 </head>
 <body>
   <div id="container">
-    <header id="header">
-      <h1>Tic Tac Toe</h1>
-      <div class="playerScores">
-        <p class="playerOne"><span class="playerOneName"></span> Score: <span class="playerOneScore">0</span></p>
-        <p class="playerTwo"><span class="playerTwoName"></span> Score: <span class="playerTwoScore">0</span></p>
-      </div>
-      <div class="activePlayerTurn">
-        <p class="playerTurn"><span class="activePlayerName"></span> turn!</p>
-      </div>
-    </header>
-    <main id="main">
-      <section class="boardContainer"></section>
+    <section class="titleContainer">
+      <h1>Welcome To Tic Tac Toe!</h1>
+    </section>
+    <main class="mainContainer">
+      <section class="descriptionContainer">
+        <p>Tic Tac Toe is simple!</p>
+        <p>It's a game in which one player draws Xs and another player draws Os inside a set of nine squares and each player tries to be the first to fill a row of squares with either Xs or Os.</p>
+      </section>
+      <section class="rulesContainer">
+        <h2 class="titleRule">Rules for Tic-Tac-Toe</h2>
+        <ul>
+          <li>The game is played on a grid that's 3 squares by 3 squares.
+          </li>
+          <li>You are X , your friend (or the computer in this case) is O . Players take turns putting their marks in empty squares.</li>
+          <li>The first player to get 3 of her marks in a row (up, down, across, or diagonally) is the winner.
+          </li>
+          <li>When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.
+          </li>
+        </ul>
+      </section>
+      <section class="playerNameContainer">
+        <section class="playerOneInput">
+          <label for="playerOneName">Enter Your First Name Player One:</label>
+          <input type="text" id="playerOneName" minlength="1">
+        </section>
+        <section class="playerTwoInput">
+          <label for="playerTwoName">Enter Your First Name Player Two:</label>
+          <input type="text" id="playerTwoName" minlength="1">
+        </section>
+      </section>
+      <section class="playButtonContainer">
+        <button class="playBtn">Play!</button>
+      </section>
     </main>
-    <footer id="footer">
-      <h4>Created by Jimmy Jimenez</h4>
-    </footer>
+    <footer></footer>
   </div>
 </body>
 </html>
