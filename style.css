@@ -1,3 +1,11 @@
+:root {
+  --mustard-yellow: #FFD23F;
+  --red: #FF1B1C;
+  --black: #090909;
+  --green: #0CCE6B;
+  --blue: #3772FF;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -20,7 +28,7 @@ body {
 #container {
   height: 100%;
   width: 100%;
-  background-color: lightskyblue;
+  background-color: var(--mustard-yellow);
 
   display: flex;
   flex-direction: column;

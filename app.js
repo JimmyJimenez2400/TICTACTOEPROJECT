@@ -432,8 +432,8 @@ const displayController = (() => {
   return { renderBoard, BoardClickable, resetDOMBoard, playAgainModal };
 })();
 
-displayController.renderBoard();
-displayController.BoardClickable();
+// displayController.renderBoard();
+// displayController.BoardClickable();
 
 // const container = document.querySelector('#container');
 
