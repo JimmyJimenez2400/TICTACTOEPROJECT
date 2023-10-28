@@ -234,11 +234,11 @@ const GameController = (() => {
   };
 
   const isGameOver = () => {
-    if (players.playerOne.getPlayerScore() === 5) {
+    if (players.playerOne.getPlayerScore() === 3) {
       statusOf.game = false;
       console.log(`${players.playerOne.getPlayerName()} has won the game!`);
       return true;
-    } else if (players.playerTwo.getPlayerScore() === 5) {
+    } else if (players.playerTwo.getPlayerScore() === 3) {
       statusOf.game = false;
       console.log(`${players.playerTwo.getPlayerName()} has won the game!`);
       return true;
@@ -402,8 +402,39 @@ const displayController = (() => {
     playerTurn.textContent = `It's ${currentActivePlayer} turn!`;
   };
 
-  return { renderBoard, BoardClickable, resetDOMBoard };
+  const playAgainModal = () => {
+    const modalContainer = document.createElement('section');
+    const topLevel = document.createElement('div');
+    const bottomLevel = document.createElement('div');
+
+    topLevel.classList.add('topLevel');
+
+    modalContainer.classList.add('modal');
+    // modalContainer.classList.add('hidden');
+
+    const closeButton = document.createElement('button');
+    closeButton.classList.add('btn-close');
+    closeButton.textContent = 'X';
+
+    const playAgainButton = document.createElement('button');
+    playAgainButton.classList.add('playBtn');
+    playAgainButton.textContent = `Play Again?`;
+
+    topLevel.appendChild(closeButton);
+    bottomLevel.appendChild(playAgainButton);
+
+    modalContainer.appendChild(topLevel);
+    modalContainer.appendChild(bottomLevel);
+
+    return modalContainer;
+  };
+
+  return { renderBoard, BoardClickable, resetDOMBoard, playAgainModal };
 })();
 
 displayController.renderBoard();
 displayController.BoardClickable();
+
+// const container = document.querySelector('#container');
+
+// container.appendChild(displayController.playAgainModal());

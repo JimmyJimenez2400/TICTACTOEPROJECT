@@ -91,3 +91,33 @@ td {
   text-align: center;
   font-size: 2rem;
 }
+
+
+/* Modal*/
+
+
+.modal {
+  min-height: 250px;
+  width: 450px;
+  background-color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: stretch;
+  gap: 0.4rem;
+  /* padding: 1.3rem; */
+
+  position: absolute;
+  top: 20%;
+
+  border: 1px solid #090808;
+  border-radius: 15px;
+}
+
+.topLevel {
+  display: flex;
+  background-color: black;
+  justify-content: flex-end;
+  width: 100%;
+}
