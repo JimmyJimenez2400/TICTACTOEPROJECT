@@ -29,11 +29,24 @@ body {
   height: 100%;
   width: 100%;
   background-color: var(--mustard-yellow);
+  color: var(--black);
 
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+}
+
+.titleContainer {
+  width: 80%;
+  border: 1px solid var(--black);
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  border: 1px solid var(--black);
 }
 
 #container>* {

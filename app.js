@@ -125,8 +125,8 @@ const GameController = (() => {
       [6, 7, 8],
     ],
     diagonally: [
-      [0, 4, 8],
       [2, 4, 6],
+      [0, 4, 8],
     ],
   };
 
@@ -192,7 +192,6 @@ const GameController = (() => {
       } else {
         console.log('NO MATCH!');
         console.log(`${horizontalConditions[i]}`);
-        return false;
       }
     }
   };
@@ -215,7 +214,6 @@ const GameController = (() => {
       } else {
         console.log('NO MATCH!');
         console.log(`${diagonalWin[i]}`);
-        return false;
       }
     }
   };
@@ -255,9 +253,9 @@ const GameController = (() => {
   const isRoundOver = () => {
     // check if player finds a match in winCondition, return true
     if (
-      checkForDiagonalWin(statusOf.currentActivePlayer) === true ||
       checkForHorizontalWin(statusOf.currentActivePlayer) === true ||
-      checkForVerticalWin(statusOf.currentActivePlayer) === true
+      checkForVerticalWin(statusOf.currentActivePlayer) === true ||
+      checkForDiagonalWin(statusOf.currentActivePlayer) === true
     ) {
       return true;
     } else if (checkForTie() === true) {
@@ -429,11 +427,11 @@ const displayController = (() => {
     return modalContainer;
   };
 
+  renderBoard();
+  BoardClickable();
+
   return { renderBoard, BoardClickable, resetDOMBoard, playAgainModal };
 })();
-
-// displayController.renderBoard();
-// displayController.BoardClickable();
 
 // const container = document.querySelector('#container');
 
