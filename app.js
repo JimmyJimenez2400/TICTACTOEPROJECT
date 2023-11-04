@@ -446,11 +446,7 @@ const displayController = (() => {
       square.addEventListener('click', (e) => {
         const squareID = e.target.dataset.id;
 
-        GameController.controlFlowOfGame(
-          squareID,
-          playerOneInput,
-          playerTwoInput
-        );
+        GameController.controlFlowOfGame(squareID);
         console.log(GameBoard.getGameBoard());
         let gameBoard = GameBoard.getGameBoard();
 
