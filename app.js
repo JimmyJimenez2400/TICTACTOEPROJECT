@@ -101,10 +101,7 @@ const GameBoard = (() => {
 
 // Control flow and state of the game's turn and checking if anyone won
 const GameController = (() => {
-  const players = {
-    playerOne: Player('John', 'X', 0),
-    playerTwo: Player('Shani', 'O', 0),
-  };
+  const players = {};
 
   const statusOf = {
     game: true,
@@ -330,7 +327,7 @@ const displayController = (() => {
 
   const createGamePage = () => {
     const container = document.createElement('div');
-    container.classList.add('gameContainer');
+    container.setAttribute('id', 'gameContainer');
 
     // header
     const headerContainer = document.createElement('header');
@@ -348,10 +345,10 @@ const displayController = (() => {
 
     const playerOneName = document.createElement('span');
     playerOneName.classList.add('playerOneName');
-    playerOneName.textContent = 'John';
+    playerOneName.textContent = `${GameController.players.playerOne.getPlayerName()}`;
 
     const playerOneScore = document.createElement('span');
-    playerOneScore.classList.add('playerOneScores');
+    playerOneScore.classList.add('playerOneScore');
     playerOneScore.textContent = '0';
 
     playerScoreContainer.appendChild(playerOneNameContainer);
@@ -365,7 +362,7 @@ const displayController = (() => {
 
     const playerTwoName = document.createElement('span');
     playerTwoName.classList.add('playerTwoName');
-    playerTwoName.textContent = 'Mary';
+    playerTwoName.textContent = `${GameController.players.playerTwo.getPlayerName()}`;
 
     const playerTwoScore = document.createElement('span');
     playerTwoScore.classList.add('playerTwoScore');
@@ -449,7 +446,11 @@ const displayController = (() => {
       square.addEventListener('click', (e) => {
         const squareID = e.target.dataset.id;
 
-        GameController.controlFlowOfGame(squareID);
+        GameController.controlFlowOfGame(
+          squareID,
+          playerOneInput,
+          playerTwoInput
+        );
         console.log(GameBoard.getGameBoard());
         let gameBoard = GameBoard.getGameBoard();
 
@@ -530,12 +531,24 @@ const displayController = (() => {
     return modalContainer;
   };
 
-  renderBoard();
-  BoardClickable();
-
   return { renderBoard, BoardClickable, resetDOMBoard, playAgainModal };
 })();
 
-// const container = document.querySelector('#container');
+const playButton = document.querySelector('.playBtn');
 
-// container.appendChild(displayController.playAgainModal());
+playButton.addEventListener('click', () => {
+  const removeIntroContainer = document.querySelector('#container');
+  const playerOneInput = document.getElementById('playerOneName').value;
+  const playerTwoInput = document.getElementById('playerTwoName').value;
+
+  console.log(playerOneInput);
+  console.log(playerTwoInput);
+
+  GameController.players.playerOne = Player(playerOneInput, 'X', 0);
+  GameController.players.playerTwo = Player(playerTwoInput, 'O', 0);
+
+  removeIntroContainer.remove();
+
+  displayController.renderBoard();
+  displayController.BoardClickable();
+});
