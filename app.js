@@ -328,11 +328,114 @@ const displayController = (() => {
     return tableContainer;
   };
 
-  const renderBoard = () => {
-    const boardContainerElement = document.querySelector('.boardContainer');
+  const createGamePage = () => {
+    const container = document.createElement('div');
+    container.classList.add('gameContainer');
 
-    boardContainerElement.appendChild(createBoard(GameBoard.getGameBoard()));
-    return boardContainerElement;
+    // header
+    const headerContainer = document.createElement('header');
+    headerContainer.setAttribute('id', 'header');
+
+    const h1Title = document.createElement('h1');
+
+    h1Title.textContent = 'Tic Tac Toe';
+
+    const playerScoreContainer = document.createElement('div');
+    playerScoreContainer.classList.add('playerScores');
+
+    const playerOneNameContainer = document.createElement('p');
+    playerOneNameContainer.classList.add('playerOne');
+
+    const playerOneName = document.createElement('span');
+    playerOneName.classList.add('playerOneName');
+    playerOneName.textContent = 'John';
+
+    const playerOneScore = document.createElement('span');
+    playerOneScore.classList.add('playerOneScores');
+    playerOneScore.textContent = '0';
+
+    playerScoreContainer.appendChild(playerOneNameContainer);
+    playerOneNameContainer.appendChild(playerOneName);
+    playerOneNameContainer.appendChild(playerOneScore);
+
+    playerOneName.insertAdjacentHTML('afterend', ' score: ');
+
+    const playerTwoNameContainer = document.createElement('p');
+    playerTwoNameContainer.classList.add('playerTwo');
+
+    const playerTwoName = document.createElement('span');
+    playerTwoName.classList.add('playerTwoName');
+    playerTwoName.textContent = 'Mary';
+
+    const playerTwoScore = document.createElement('span');
+    playerTwoScore.classList.add('playerTwoScore');
+    playerTwoScore.textContent = '0';
+
+    playerScoreContainer.appendChild(playerTwoNameContainer);
+    playerTwoNameContainer.appendChild(playerTwoName);
+    playerTwoNameContainer.appendChild(playerTwoScore);
+
+    playerTwoName.insertAdjacentHTML('afterend', ' score: ');
+
+    const activePlayerTurnContainer = document.createElement('div');
+    activePlayerTurnContainer.classList.add('activePlayerTurn');
+
+    const playerTurn = document.createElement('p');
+    playerTurn.classList.add('playerTurn');
+
+    playerTurn.textContent = "It's ";
+
+    const activePlayerName = document.createElement('span');
+    activePlayerName.classList.add('activePlayerName');
+
+    activePlayerName.textContent = 'John';
+
+    playerTurn.appendChild(activePlayerName);
+
+    activePlayerTurnContainer.appendChild(playerTurn);
+
+    playerTurn.insertAdjacentHTML('afterend', ' turn!');
+
+    headerContainer.appendChild(h1Title);
+    headerContainer.appendChild(playerScoreContainer);
+    headerContainer.appendChild(activePlayerTurnContainer);
+
+    // main
+
+    const mainContainer = document.createElement('main');
+    mainContainer.setAttribute('id', 'main');
+
+    const boardContainer = document.createElement('section');
+    boardContainer.classList.add('boardContainer');
+
+    boardContainer.appendChild(createBoard(GameBoard.getGameBoard()));
+
+    mainContainer.appendChild(boardContainer);
+
+    // footer
+    const footerContainer = document.createElement('footer');
+    footerContainer.setAttribute('id', 'footer');
+
+    const h4Title = document.createElement('h4');
+    h4Title.textContent = 'Created by Jimmy Jimenez';
+
+    footerContainer.appendChild(h4Title);
+
+    container.appendChild(headerContainer);
+    container.appendChild(mainContainer);
+    container.appendChild(footerContainer);
+
+    return container;
+  };
+
+  const renderBoard = () => {
+    createGamePage();
+    const body = document.querySelector('body');
+
+    body.appendChild(createGamePage());
+    return body;
+
+    // we will call everything in here
   };
 
   const BoardClickable = () => {
