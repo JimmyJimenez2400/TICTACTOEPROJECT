@@ -105,7 +105,6 @@ const GameController = (() => {
 
   const statusOf = {
     game: true,
-    currentActivePlayer: players.playerOne,
   };
 
   //for every move, we wanna check if it's a vertical, horizontal, or diagonal win
@@ -385,7 +384,7 @@ const displayController = (() => {
     const activePlayerName = document.createElement('span');
     activePlayerName.classList.add('activePlayerName');
 
-    activePlayerName.textContent = 'John';
+    activePlayerName.textContent = `${GameController.statusOf.currentActivePlayer.getPlayerName()}`;
 
     playerTurn.appendChild(activePlayerName);
 
@@ -537,11 +536,10 @@ playButton.addEventListener('click', () => {
   const playerOneInput = document.getElementById('playerOneName').value;
   const playerTwoInput = document.getElementById('playerTwoName').value;
 
-  console.log(playerOneInput);
-  console.log(playerTwoInput);
-
   GameController.players.playerOne = Player(playerOneInput, 'X', 0);
   GameController.players.playerTwo = Player(playerTwoInput, 'O', 0);
+  GameController.statusOf.currentActivePlayer =
+    GameController.players.playerOne;
 
   removeIntroContainer.remove();
 
