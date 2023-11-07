@@ -230,7 +230,7 @@ const GameController = (() => {
   const isGameOver = () => {
     if (players.playerOne.getPlayerScore() === 3) {
       statusOf.game = false;
-      console.log(`${players.playerOne.getPlayerName()} has won the game!`);
+      console.log(`\n\n${players.playerOne.getPlayerName()} has won the game!\n\n`);
       return true;
     } else if (players.playerTwo.getPlayerScore() === 3) {
       statusOf.game = false;
@@ -282,6 +282,9 @@ const GameController = (() => {
     if (isGameOver()) {
       // stop game
       console.log('GAME HAS ENDED');
+      
+      // Announce Winner
+      // Call PlayAgain Function
       return 'GAME HAS ENDED';
     }
 
@@ -378,8 +381,7 @@ const displayController = (() => {
 
     const playerTurn = document.createElement('p');
     playerTurn.classList.add('playerTurn');
-
-    playerTurn.textContent = "It's ";
+    playerTurn.textContent = "It's "
 
     const activePlayerName = document.createElement('span');
     activePlayerName.classList.add('activePlayerName');
@@ -387,10 +389,9 @@ const displayController = (() => {
     activePlayerName.textContent = `${GameController.statusOf.currentActivePlayer.getPlayerName()}`;
 
     playerTurn.appendChild(activePlayerName);
+    playerTurn.insertAdjacentHTML('beforeend', " turn!");
 
     activePlayerTurnContainer.appendChild(playerTurn);
-
-    playerTurn.insertAdjacentHTML('afterend', ' turn!');
 
     headerContainer.appendChild(h1Title);
     headerContainer.appendChild(playerScoreContainer);
