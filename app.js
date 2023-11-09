@@ -502,9 +502,13 @@ const displayController = (() => {
   };
 
   const playAgainModal = () => {
-    const modalContainer = document.createElement('section');
+    const modalContainer = document.createElement('div');
+
+    const insideContainer = document.createElement('section');
+    insideContainer.classList.add('insideContainer');
     const topLevel = document.createElement('div');
     const bottomLevel = document.createElement('div');
+    bottomLevel.classList.add('bottomLevel');
 
     topLevel.classList.add('topLevel');
     const announceWinnerText = document.createElement('h2');
@@ -526,8 +530,10 @@ const displayController = (() => {
     
     bottomLevel.appendChild(playAgainButton);
 
-    modalContainer.appendChild(topLevel);
-    modalContainer.appendChild(bottomLevel);
+    insideContainer.appendChild(topLevel);
+    insideContainer.appendChild(bottomLevel);
+
+    modalContainer.appendChild(insideContainer);
 
     return modalContainer;
   };
