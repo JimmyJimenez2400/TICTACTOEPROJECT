@@ -284,8 +284,8 @@ const GameController = (() => {
       console.log('GAME HAS ENDED');
       
       // Announce Winner
-      // Call PlayAgain Function
-      return 'GAME HAS ENDED';
+      // Call PlayAgain Function Modal
+      displayController.appendPlayAgainModalToContainer();
     }
 
     console.log('GOING AGAIN!');
@@ -458,6 +458,7 @@ const displayController = (() => {
     });
   };
 
+  // 
   const resetDOMBoard = () => {
     const allSquares = document.querySelectorAll('.square');
 
@@ -506,6 +507,8 @@ const displayController = (() => {
     const bottomLevel = document.createElement('div');
 
     topLevel.classList.add('topLevel');
+    const announceWinnerText = document.createElement('h2');
+    announceWinnerText.textContent = `THE WINNER IS: `
 
     modalContainer.classList.add('modal');
     // modalContainer.classList.add('hidden');
@@ -518,7 +521,9 @@ const displayController = (() => {
     playAgainButton.classList.add('playBtn');
     playAgainButton.textContent = `Play Again?`;
 
+    topLevel.appendChild(announceWinnerText);
     topLevel.appendChild(closeButton);
+    
     bottomLevel.appendChild(playAgainButton);
 
     modalContainer.appendChild(topLevel);
@@ -527,7 +532,14 @@ const displayController = (() => {
     return modalContainer;
   };
 
-  return { renderBoard, BoardClickable, resetDOMBoard, playAgainModal };
+  const appendPlayAgainModalToContainer = () =>{
+    const container = document.querySelector('#gameContainer');
+
+    container.appendChild(playAgainModal());
+  }
+
+
+  return { renderBoard, BoardClickable, resetDOMBoard, playAgainModal,appendPlayAgainModalToContainer };
 })();
 
 const playButton = document.querySelector('.playBtn');
@@ -537,7 +549,7 @@ playButton.addEventListener('click', () => {
   const playerOneInput = document.getElementById('playerOneName').value;
   const playerTwoInput = document.getElementById('playerTwoName').value;
 
-  GameController.players.playerOne = Player(playerOneInput, 'X', 0);
+  GameController.players.playerOne = Player(playerOneInput, 'X', 3);
   GameController.players.playerTwo = Player(playerTwoInput, 'O', 0);
   GameController.statusOf.currentActivePlayer =
     GameController.players.playerOne;
@@ -547,3 +559,6 @@ playButton.addEventListener('click', () => {
   displayController.renderBoard();
   displayController.BoardClickable();
 });
+
+
+const restartBtn = document.querySelector('.restartBtn');
