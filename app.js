@@ -25,6 +25,10 @@ const Player = (playerName, marker, score) => {
     playerStorage = [];
   };
 
+  const resetPlayerScore = () => {
+    score = 0;
+  };
+
   return {
     getPlayerName,
     getPlayerMarker,
@@ -33,6 +37,7 @@ const Player = (playerName, marker, score) => {
     getPlayerStorage,
     pushToStorage,
     resetPlayerStorage,
+    resetPlayerScore,
   };
 };
 
@@ -40,7 +45,7 @@ const Player = (playerName, marker, score) => {
 
 // Purpose of Gameboard is building the thing, placing markers, and printBoard to console
 const GameBoard = (() => {
-  let gameBoard = ['', '', '', '', '', '', '', '', ''];
+  let gameBoard = ["", "", "", "", "", "", "", "", ""];
 
   const getGameBoard = () => gameBoard;
 
@@ -50,7 +55,7 @@ const GameBoard = (() => {
   };
 
   const resetGameBoard = () => {
-    gameBoard = ['', '', '', '', '', '', '', '', ''];
+    gameBoard = ["", "", "", "", "", "", "", "", ""];
   };
 
   const placeMarker = (currentPlayer, placement) => {
@@ -79,7 +84,7 @@ const GameBoard = (() => {
 
     const currentGameBoard = getGameBoard();
 
-    if (currentGameBoard[indexNumber] === '') {
+    if (currentGameBoard[indexNumber] === "") {
       placeMarker(GameController.statusOf.currentActivePlayer, indexNumber);
       return GameController.switchActivePlayer();
     } else {
@@ -105,7 +110,6 @@ const GameController = (() => {
 
   const statusOf = {
     game: true,
-    
   };
 
   //for every move, we wanna check if it's a vertical, horizontal, or diagonal win
@@ -136,11 +140,11 @@ const GameController = (() => {
     console.log(statusOf.currentActivePlayer === players.playerOne);
 
     if (statusOf.currentActivePlayer === players.playerOne) {
-      console.log('Switching to playerTwo');
+      console.log("Switching to playerTwo");
       statusOf.currentActivePlayer = players.playerTwo;
       console.log(statusOf.currentActivePlayer.getPlayerName());
     } else {
-      console.log('Switching to playerOne');
+      console.log("Switching to playerOne");
       statusOf.currentActivePlayer = players.playerOne;
       console.log(statusOf.currentActivePlayer.getPlayerName());
     }
@@ -155,14 +159,14 @@ const GameController = (() => {
 
       if (isSubset(VerticalConditions[i], currentPlayerStorage)) {
         console.log(`${VerticalConditions[i]}`);
-        console.log('MATCH');
+        console.log("MATCH");
         player.increasePlayerScore();
         console.log(
           `${player.getPlayerName()} has ${player.getPlayerScore()} points!`
         );
         return true;
       } else {
-        console.log('NO MATCH');
+        console.log("NO MATCH");
         console.log(`${VerticalConditions[i]}`);
       }
 
@@ -178,7 +182,7 @@ const GameController = (() => {
       console.log(`${player.getPlayerName()} Storage: ${currentPlayerStorage}`);
 
       if (isSubset(horizontalConditions[i], currentPlayerStorage)) {
-        console.log('MATCH FOUND');
+        console.log("MATCH FOUND");
         console.log(`${horizontalConditions[i]}`);
         player.increasePlayerScore();
         console.log(
@@ -187,7 +191,7 @@ const GameController = (() => {
         // restart game with score still intact
         return true;
       } else {
-        console.log('NO MATCH!');
+        console.log("NO MATCH!");
         console.log(`${horizontalConditions[i]}`);
       }
     }
@@ -201,7 +205,7 @@ const GameController = (() => {
       console.log(`${player.getPlayerName()} storage: ${currentPlayerStorage}`);
 
       if (isSubset(diagonalWin[i], currentPlayerStorage)) {
-        console.log('MATCH FOUND');
+        console.log("MATCH FOUND");
         console.log(`${diagonalWin[i]}`);
         player.increasePlayerScore();
         console.log(
@@ -209,7 +213,7 @@ const GameController = (() => {
         );
         return true;
       } else {
-        console.log('NO MATCH!');
+        console.log("NO MATCH!");
         console.log(`${diagonalWin[i]}`);
       }
     }
@@ -219,23 +223,26 @@ const GameController = (() => {
     // In order to get a tie
     let gameBoard = GameBoard.getGameBoard();
 
-    if (gameBoard.includes('')) {
-      console.log('STILL SPACES AVAILABLE');
+    if (gameBoard.includes("")) {
+      console.log("STILL SPACES AVAILABLE");
       return false;
     }
 
-    console.log('No more spaces');
+    console.log("No more spaces");
     return true;
   };
 
   const isGameOver = () => {
     if (players.playerOne.getPlayerScore() === 3) {
       statusOf.game = false;
-      
-      console.log(`\n\n${players.playerOne.getPlayerName()} has won the game!\n\n`);
+      statusOf.winner = players.playerOne;
+      console.log(
+        `\n\n${players.playerOne.getPlayerName()} has won the game!\n\n`
+      );
       return true;
     } else if (players.playerTwo.getPlayerScore() === 3) {
       statusOf.game = false;
+      statusOf.winner = players.playerTwo;
       console.log(`${players.playerTwo.getPlayerName()} has won the game!`);
       return true;
     } else {
@@ -268,6 +275,27 @@ const GameController = (() => {
     displayController.resetDOMBoard();
     statusOf.currentActivePlayer = players.playerOne;
   };
+
+  const resetPlayerScores = () => {
+    players.playerOne.resetPlayerScore();
+    players.playerTwo.resetPlayerScore();
+  };
+
+  const resetPlayerTurn = () => {
+    statusOf.currentActivePlayer = players.playerOne;
+  };
+  const restartGame = () => {
+    // call everything to reset
+    GameBoard.resetGameBoard();
+    resetPlayerStorage();
+    displayController.resetDOMBoard();
+    // need to reset points for players
+    resetPlayerScores();
+    // reset DOM points on screen
+    displayController.resetPlayersPoints();
+    resetPlayerTurn();
+    displayController.resetPlayerTurnText();
+  };
   //statusOf should be calling the functions not be the status's
 
   const controlFlowOfGame = (playerChoice) => {
@@ -283,14 +311,14 @@ const GameController = (() => {
 
     if (isGameOver()) {
       // stop game
-      console.log('GAME HAS ENDED');
-      
+      console.log("GAME HAS ENDED");
+
       // Announce Winner
       // Call PlayAgain Function Modal
       displayController.appendPlayAgainModalToContainer();
     }
 
-    console.log('GOING AGAIN!');
+    console.log("GOING AGAIN!");
   };
 
   return {
@@ -298,13 +326,14 @@ const GameController = (() => {
     switchActivePlayer,
     statusOf,
     players,
+    restartGame,
   };
 })();
 
 // ONLY FOR DOM
 const displayController = (() => {
   const createBoard = (gameBoardArr) => {
-    const tableContainer = document.createElement('table');
+    const tableContainer = document.createElement("table");
 
     // We want to create a 3x3 table
     let startCount = 0;
@@ -316,7 +345,7 @@ const displayController = (() => {
         for (let row = 0; row < gameBoardArr.length; row += 1) {
           if (row % 3 == 0) {
             const newCell = newRow.insertCell();
-            newCell.classList.add('square');
+            newCell.classList.add("square");
 
             const newText = document.createTextNode(gameBoardArr[startCount++]);
 
@@ -330,68 +359,68 @@ const displayController = (() => {
   };
 
   const createGamePage = () => {
-    const container = document.createElement('div');
-    container.setAttribute('id', 'gameContainer');
+    const container = document.createElement("div");
+    container.setAttribute("id", "gameContainer");
 
     // header
-    const headerContainer = document.createElement('header');
-    headerContainer.setAttribute('id', 'header');
+    const headerContainer = document.createElement("header");
+    headerContainer.setAttribute("id", "header");
 
-    const h1Title = document.createElement('h1');
+    const h1Title = document.createElement("h1");
 
-    h1Title.textContent = 'Tic Tac Toe';
+    h1Title.textContent = "Tic Tac Toe";
 
-    const playerScoreContainer = document.createElement('div');
-    playerScoreContainer.classList.add('playerScores');
+    const playerScoreContainer = document.createElement("div");
+    playerScoreContainer.classList.add("playerScores");
 
-    const playerOneNameContainer = document.createElement('p');
-    playerOneNameContainer.classList.add('playerOne');
+    const playerOneNameContainer = document.createElement("p");
+    playerOneNameContainer.classList.add("playerOne");
 
-    const playerOneName = document.createElement('span');
-    playerOneName.classList.add('playerOneName');
+    const playerOneName = document.createElement("span");
+    playerOneName.classList.add("playerOneName");
     playerOneName.textContent = `${GameController.players.playerOne.getPlayerName()}`;
 
-    const playerOneScore = document.createElement('span');
-    playerOneScore.classList.add('playerOneScore');
-    playerOneScore.textContent = '0';
+    const playerOneScore = document.createElement("span");
+    playerOneScore.classList.add("playerOneScore");
+    playerOneScore.textContent = "0";
 
     playerScoreContainer.appendChild(playerOneNameContainer);
     playerOneNameContainer.appendChild(playerOneName);
     playerOneNameContainer.appendChild(playerOneScore);
 
-    playerOneName.insertAdjacentHTML('afterend', ' score: ');
+    playerOneName.insertAdjacentHTML("afterend", " score: ");
 
-    const playerTwoNameContainer = document.createElement('p');
-    playerTwoNameContainer.classList.add('playerTwo');
+    const playerTwoNameContainer = document.createElement("p");
+    playerTwoNameContainer.classList.add("playerTwo");
 
-    const playerTwoName = document.createElement('span');
-    playerTwoName.classList.add('playerTwoName');
+    const playerTwoName = document.createElement("span");
+    playerTwoName.classList.add("playerTwoName");
     playerTwoName.textContent = `${GameController.players.playerTwo.getPlayerName()}`;
 
-    const playerTwoScore = document.createElement('span');
-    playerTwoScore.classList.add('playerTwoScore');
-    playerTwoScore.textContent = '0';
+    const playerTwoScore = document.createElement("span");
+    playerTwoScore.classList.add("playerTwoScore");
+    playerTwoScore.textContent = "0";
 
     playerScoreContainer.appendChild(playerTwoNameContainer);
     playerTwoNameContainer.appendChild(playerTwoName);
     playerTwoNameContainer.appendChild(playerTwoScore);
 
-    playerTwoName.insertAdjacentHTML('afterend', ' score: ');
+    playerTwoName.insertAdjacentHTML("afterend", " score: ");
 
-    const activePlayerTurnContainer = document.createElement('div');
-    activePlayerTurnContainer.classList.add('activePlayerTurn');
+    const activePlayerTurnContainer = document.createElement("div");
+    activePlayerTurnContainer.classList.add("activePlayerTurn");
 
-    const playerTurn = document.createElement('p');
-    playerTurn.classList.add('playerTurn');
-    playerTurn.textContent = "It's "
+    const playerTurn = document.createElement("p");
+    playerTurn.classList.add("playerTurn");
+    playerTurn.textContent = "It's ";
 
-    const activePlayerName = document.createElement('span');
-    activePlayerName.classList.add('activePlayerName');
+    const activePlayerName = document.createElement("span");
+    activePlayerName.classList.add("activePlayerName");
 
     activePlayerName.textContent = `${GameController.statusOf.currentActivePlayer.getPlayerName()}`;
 
     playerTurn.appendChild(activePlayerName);
-    playerTurn.insertAdjacentHTML('beforeend', " turn!");
+    playerTurn.insertAdjacentHTML("beforeend", " turn!");
 
     activePlayerTurnContainer.appendChild(playerTurn);
 
@@ -401,22 +430,22 @@ const displayController = (() => {
 
     // main
 
-    const mainContainer = document.createElement('main');
-    mainContainer.setAttribute('id', 'main');
+    const mainContainer = document.createElement("main");
+    mainContainer.setAttribute("id", "main");
 
-    const boardContainer = document.createElement('section');
-    boardContainer.classList.add('boardContainer');
+    const boardContainer = document.createElement("section");
+    boardContainer.classList.add("boardContainer");
 
     boardContainer.appendChild(createBoard(GameBoard.getGameBoard()));
 
     mainContainer.appendChild(boardContainer);
 
     // footer
-    const footerContainer = document.createElement('footer');
-    footerContainer.setAttribute('id', 'footer');
+    const footerContainer = document.createElement("footer");
+    footerContainer.setAttribute("id", "footer");
 
-    const h4Title = document.createElement('h4');
-    h4Title.textContent = 'Created by Jimmy Jimenez';
+    const h4Title = document.createElement("h4");
+    h4Title.textContent = "Created by Jimmy Jimenez";
 
     footerContainer.appendChild(h4Title);
 
@@ -429,7 +458,7 @@ const displayController = (() => {
 
   const renderBoard = () => {
     createGamePage();
-    const body = document.querySelector('body');
+    const body = document.querySelector("body");
 
     body.appendChild(createGamePage());
     return body;
@@ -439,13 +468,13 @@ const displayController = (() => {
 
   const BoardClickable = () => {
     // We need to grab all squares on the board and turn them into event listeners
-    const allSquares = document.querySelectorAll('.square');
+    const allSquares = document.querySelectorAll(".square");
 
     const allSquaresToArray = [...allSquares];
 
     allSquaresToArray.forEach((square, index) => {
-      square.setAttribute('data-id', index);
-      square.addEventListener('click', (e) => {
+      square.setAttribute("data-id", index);
+      square.addEventListener("click", (e) => {
         const squareID = e.target.dataset.id;
 
         GameController.controlFlowOfGame(squareID);
@@ -460,24 +489,24 @@ const displayController = (() => {
     });
   };
 
-  // 
+  //
   const resetDOMBoard = () => {
-    const allSquares = document.querySelectorAll('.square');
+    const allSquares = document.querySelectorAll(".square");
 
     const allSquaresToArray = [...allSquares];
 
     allSquaresToArray.forEach((square) => {
-      square.textContent = '';
+      square.textContent = "";
     });
   };
 
   const updateScoreBoard = () => {
     // grab elements
-    const playerOneName = document.querySelector('.playerOneName');
-    const playerTwoName = document.querySelector('.playerTwoName');
+    const playerOneName = document.querySelector(".playerOneName");
+    const playerTwoName = document.querySelector(".playerTwoName");
 
-    const playerOneScore = document.querySelector('.playerOneScore');
-    const playerTwoScore = document.querySelector('.playerTwoScore');
+    const playerOneScore = document.querySelector(".playerOneScore");
+    const playerTwoScore = document.querySelector(".playerTwoScore");
 
     console.log(playerOneScore, playerTwoScore);
 
@@ -494,8 +523,17 @@ const displayController = (() => {
       GameController.players.playerTwo.getPlayerScore();
   };
 
+  const resetPlayersPoints = () => {
+    // need to grab the span that shows the points and set to 0
+    const playerOneScore = document.querySelector(".playerOneScore");
+    const playerTwoScore = document.querySelector(".playerTwoScore");
+
+    playerOneScore.textContent = "0";
+    playerTwoScore.textContent = "0 ";
+  };
+
   const updatePlayerTurn = () => {
-    const playerTurn = document.querySelector('.playerTurn');
+    const playerTurn = document.querySelector(".playerTurn");
 
     let currentActivePlayer =
       GameController.statusOf.currentActivePlayer.getPlayerName();
@@ -503,36 +541,43 @@ const displayController = (() => {
     playerTurn.textContent = `It's ${currentActivePlayer} turn!`;
   };
 
+  const resetPlayerTurnText = () => {
+    const playerTurn = document.querySelector(".playerTurn");
+
+    let currentActivePlayer = GameController.players.playerOne.getPlayerName();
+
+    playerTurn.textContent = `It's ${currentActivePlayer} turn!`;
+  };
+
   const playAgainModal = () => {
-    const modalContainer = document.createElement('div');
+    const modalContainer = document.createElement("div");
 
-    const insideContainer = document.createElement('section');
-    insideContainer.classList.add('insideContainer');
-    const topLevel = document.createElement('section');
-    topLevel.classList.add('topLevel');
-    const midLevel = document.createElement('section');
-    const bottomLevel = document.createElement('section');
-    bottomLevel.classList.add('bottomLevel');
+    const insideContainer = document.createElement("section");
+    insideContainer.classList.add("insideContainer");
+    const topLevel = document.createElement("section");
+    topLevel.classList.add("topLevel");
+    const midLevel = document.createElement("section");
+    const bottomLevel = document.createElement("section");
+    bottomLevel.classList.add("bottomLevel");
 
-    midLevel.classList.add('midLevel');
-    const announceWinnerText = document.createElement('h2');
-    announceWinnerText.textContent = `THE WINNER IS: `;
+    midLevel.classList.add("midLevel");
+    const announceWinnerText = document.createElement("h2");
+    announceWinnerText.textContent = `THE WINNER IS: ${GameController.statusOf.winner.getPlayerName()}`;
 
-    modalContainer.classList.add('modal');
+    modalContainer.classList.add("modal");
     // modalContainer.classList.add('hidden');
 
-    const closeButton = document.createElement('button');
-    closeButton.classList.add('btn-close');
-    closeButton.textContent = 'X';
+    const closeButton = document.createElement("button");
+    closeButton.classList.add("btn-close");
+    closeButton.textContent = "X";
 
-    const playAgainButton = document.createElement('button');
-    playAgainButton.classList.add('playBtn');
+    const playAgainButton = document.createElement("button");
+    playAgainButton.classList.add("playAgainBtn");
     playAgainButton.textContent = `Play Again?`;
 
     topLevel.appendChild(closeButton);
     midLevel.appendChild(announceWinnerText);
-    
-    
+
     bottomLevel.appendChild(playAgainButton);
 
     insideContainer.appendChild(topLevel);
@@ -544,25 +589,45 @@ const displayController = (() => {
     return modalContainer;
   };
 
-  const appendPlayAgainModalToContainer = () =>{
-    const container = document.querySelector('#gameContainer');
+  const appendPlayAgainModalToContainer = () => {
+    const container = document.querySelector("#gameContainer");
 
     container.appendChild(playAgainModal());
-  }
 
+    const restartBtn = document.querySelector(".playAgainBtn");
+    restartBtn.addEventListener("click", () => {
+      GameController.restartGame();
+      const modalContainer = document.querySelector(".modal");
+      modalContainer.remove();
+    });
 
-  return { renderBoard, BoardClickable, resetDOMBoard, playAgainModal,appendPlayAgainModalToContainer };
+    const exitButton = document.querySelector(".btn-close");
+    exitButton.addEventListener("click", () => {
+      const modalContainer = document.querySelector(".modal");
+      modalContainer.remove();
+    });
+  };
+
+  return {
+    renderBoard,
+    BoardClickable,
+    resetDOMBoard,
+    playAgainModal,
+    appendPlayAgainModalToContainer,
+    resetPlayersPoints,
+    resetPlayerTurnText,
+  };
 })();
 
-const playButton = document.querySelector('.playBtn');
+const playButton = document.querySelector(".playBtn");
 
-playButton.addEventListener('click', () => {
-  const removeIntroContainer = document.querySelector('#container');
-  const playerOneInput = document.getElementById('playerOneName').value;
-  const playerTwoInput = document.getElementById('playerTwoName').value;
+playButton.addEventListener("click", () => {
+  const removeIntroContainer = document.querySelector("#container");
+  const playerOneInput = document.getElementById("playerOneName").value;
+  const playerTwoInput = document.getElementById("playerTwoName").value;
 
-  GameController.players.playerOne = Player(playerOneInput, 'X', 3);
-  GameController.players.playerTwo = Player(playerTwoInput, 'O', 0);
+  GameController.players.playerOne = Player(playerOneInput, "X", 0);
+  GameController.players.playerTwo = Player(playerTwoInput, "O", 0);
   GameController.statusOf.currentActivePlayer =
     GameController.players.playerOne;
 
@@ -571,6 +636,3 @@ playButton.addEventListener('click', () => {
   displayController.renderBoard();
   displayController.BoardClickable();
 });
-
-
-const restartBtn = document.querySelector('.restartBtn');
