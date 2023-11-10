@@ -105,6 +105,7 @@ const GameController = (() => {
 
   const statusOf = {
     game: true,
+    
   };
 
   //for every move, we wanna check if it's a vertical, horizontal, or diagonal win
@@ -230,6 +231,7 @@ const GameController = (() => {
   const isGameOver = () => {
     if (players.playerOne.getPlayerScore() === 3) {
       statusOf.game = false;
+      
       console.log(`\n\n${players.playerOne.getPlayerName()} has won the game!\n\n`);
       return true;
     } else if (players.playerTwo.getPlayerScore() === 3) {
@@ -506,13 +508,15 @@ const displayController = (() => {
 
     const insideContainer = document.createElement('section');
     insideContainer.classList.add('insideContainer');
-    const topLevel = document.createElement('div');
-    const bottomLevel = document.createElement('div');
+    const topLevel = document.createElement('section');
+    topLevel.classList.add('topLevel');
+    const midLevel = document.createElement('section');
+    const bottomLevel = document.createElement('section');
     bottomLevel.classList.add('bottomLevel');
 
-    topLevel.classList.add('topLevel');
+    midLevel.classList.add('midLevel');
     const announceWinnerText = document.createElement('h2');
-    announceWinnerText.textContent = `THE WINNER IS: `
+    announceWinnerText.textContent = `THE WINNER IS: `;
 
     modalContainer.classList.add('modal');
     // modalContainer.classList.add('hidden');
@@ -525,12 +529,14 @@ const displayController = (() => {
     playAgainButton.classList.add('playBtn');
     playAgainButton.textContent = `Play Again?`;
 
-    topLevel.appendChild(announceWinnerText);
     topLevel.appendChild(closeButton);
+    midLevel.appendChild(announceWinnerText);
+    
     
     bottomLevel.appendChild(playAgainButton);
 
     insideContainer.appendChild(topLevel);
+    insideContainer.appendChild(midLevel);
     insideContainer.appendChild(bottomLevel);
 
     modalContainer.appendChild(insideContainer);
