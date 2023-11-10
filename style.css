@@ -103,7 +103,7 @@ body {
   color: var(--black);
 }
 
-.playBtn {
+.playBtn, .playAgainBtn {
   cursor: pointer;
   padding: 10px 20px;
   background-color: var(--green);
